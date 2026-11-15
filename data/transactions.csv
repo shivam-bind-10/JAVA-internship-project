@@ -1,2 +1,12 @@
 ID,Title,Amount,Type,Category,Date,PaymentMethod,Notes
-d72147ab,"money",1000.00,INCOME,ALLOWANCE,2026-11-03,UPI,""
+c4cf5355,"Monthly Pocket Money",12000.00,INCOME,ALLOWANCE,2026-11-01,NET_BANKING,"Monthly allowance from parents"
+da239a97,"Campus Coding / Tutoring Gig",3500.00,INCOME,PART_TIME,2026-11-07,UPI,"Web dev freelancing & math tutoring"
+ff7475ed,"College Merit Scholarship",4000.00,INCOME,SCHOLARSHIP,2026-11-03,NET_BANKING,"Semester scholarship installment"
+378f5c3b,"Semester Textbooks & Lab Manuals",1850.00,EXPENSE,BOOKS,2026-10-31,UPI,"Data Structures and Java books"
+6d0f081c,"Hostel Canteen Meals & Snacks",1250.00,EXPENSE,FOOD,2026-11-03,UPI,"Weekly canteen breakfast & lunch"
+8096d9f8,"Hostel / PG Room Rent Share",5500.00,EXPENSE,RENT,2026-11-02,NET_BANKING,"Hostel room rent"
+633651d3,"Monthly Metro / Bus Pass",850.00,EXPENSE,TRANSPORT,2026-11-05,DEBIT_CARD,"Student transit smartcard pass"
+ab56074e,"Weekend Movie & Outing",650.00,EXPENSE,ENTERTAINMENT,2026-11-09,UPI,"Movie tickets & snacks with friends"
+9976330f,"Stationery & Record Notebooks",320.00,EXPENSE,BOOKS,2026-11-11,CASH,"Notebooks and project record sheets"
+21ee18a5,"Mobile Recharge & Dorm Wi-Fi",499.00,EXPENSE,UTILITIES,2026-11-05,UPI,"Monthly 5G unlimited plan"
+587f9552,"Pharmacy & Health Essentials",280.00,EXPENSE,HEALTH,2026-11-13,CASH,"First aid and medicines"

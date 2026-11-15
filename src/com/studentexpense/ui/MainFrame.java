@@ -49,22 +49,42 @@ public class MainFrame extends JFrame implements ExpenseManager.DataChangeListen
     }
 
     private void initUI() {
-        JPanel rootPanel = new JPanel(new BorderLayout(0, 10));
-        rootPanel.setBackground(ModernUIUtils.COLOR_BG);
+        JPanel rootPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setPaint(new GradientPaint(0, 0, ModernUIUtils.COLOR_BG_START, 0, getHeight(), ModernUIUtils.COLOR_BG_END));
+                g2.fillRect(0, 0, getWidth(), getHeight());
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        rootPanel.setLayout(new BorderLayout(0, 12));
         rootPanel.setBorder(new EmptyBorder(12, 16, 10, 16));
 
         // --- 1. TOP APP BAR: Brand Title & Quick Utilities ---
         JPanel topAppBar = new JPanel(new BorderLayout(15, 0));
         topAppBar.setOpaque(false);
+        topAppBar.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(191, 219, 254), 1, true),
+                new EmptyBorder(12, 16, 12, 16)));
+        topAppBar.setBackground(new Color(255, 255, 255, 190));
 
         JPanel brandPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         brandPanel.setOpaque(false);
 
         JLabel lblLogo = new JLabel("🎓");
-        lblLogo.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 28));
+        lblLogo.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 30));
 
-        JPanel brandText = new JPanel(new GridLayout(2, 1, 0, 2));
+        JPanel brandText = new JPanel(new GridLayout(3, 1, 0, 2));
         brandText.setOpaque(false);
+
+        JLabel lblBadge = new JLabel("SMART MONEY FOR STUDENTS");
+        lblBadge.setFont(new Font(ModernUIUtils.FONT_NAME, Font.BOLD, 10));
+        lblBadge.setForeground(ModernUIUtils.COLOR_PRIMARY);
+        lblBadge.setOpaque(true);
+        lblBadge.setBackground(new Color(219, 234, 254));
+        lblBadge.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
 
         JLabel lblTitle = new JLabel("Student Expense & Budget Management System");
         lblTitle.setFont(new Font(ModernUIUtils.FONT_NAME, Font.BOLD, 18));
@@ -74,6 +94,7 @@ public class MainFrame extends JFrame implements ExpenseManager.DataChangeListen
         lblSub.setFont(ModernUIUtils.FONT_SMALL);
         lblSub.setForeground(ModernUIUtils.COLOR_TEXT_MUTED);
 
+        brandText.add(lblBadge);
         brandText.add(lblTitle);
         brandText.add(lblSub);
 
@@ -83,7 +104,7 @@ public class MainFrame extends JFrame implements ExpenseManager.DataChangeListen
         JPanel topTools = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         topTools.setOpaque(false);
 
-        JButton btnDemo = ModernUIUtils.createSecondaryButton("🔄 Load Demo Data");
+        JButton btnDemo = ModernUIUtils.createPillButton("🔄 Load Demo Data", new Color(241, 245, 249), new Color(226, 232, 240), ModernUIUtils.COLOR_TEXT_DARK);
         btnDemo.setFont(ModernUIUtils.FONT_SMALL);
         btnDemo.addActionListener(e -> {
             int c = JOptionPane.showConfirmDialog(this,
@@ -95,7 +116,7 @@ public class MainFrame extends JFrame implements ExpenseManager.DataChangeListen
             }
         });
 
-        JButton btnClear = ModernUIUtils.createDangerButton("🗑️ Reset to 0");
+        JButton btnClear = ModernUIUtils.createPillButton("🗑️ Reset to 0", ModernUIUtils.COLOR_DANGER, new Color(220, 38, 38), Color.WHITE);
         btnClear.setFont(ModernUIUtils.FONT_SMALL);
         btnClear.addActionListener(e -> {
             int c = JOptionPane.showConfirmDialog(this,
@@ -107,7 +128,7 @@ public class MainFrame extends JFrame implements ExpenseManager.DataChangeListen
             }
         });
 
-        JButton btnAbout = ModernUIUtils.createSecondaryButton("ℹ️ About");
+        JButton btnAbout = ModernUIUtils.createPillButton("ℹ️ About", new Color(239, 246, 255), new Color(191, 219, 254), ModernUIUtils.COLOR_PRIMARY);
         btnAbout.setFont(ModernUIUtils.FONT_SMALL);
         btnAbout.addActionListener(e -> showAboutDialog());
 
@@ -122,7 +143,6 @@ public class MainFrame extends JFrame implements ExpenseManager.DataChangeListen
         JPanel kpiContainer = new JPanel(new GridLayout(1, 3, 14, 0));
         kpiContainer.setOpaque(false);
 
-        // Card 1: TOTAL INCOME (Impossible to miss!)
         JPanel cardIncome = createTopKpiCard(
                 "🟢 TOTAL INCOME (MONEY IN)",
                 "₹ 0.00",
@@ -133,7 +153,6 @@ public class MainFrame extends JFrame implements ExpenseManager.DataChangeListen
         );
         lblTotalIncome = (JLabel) cardIncome.getClientProperty("valueLabel");
 
-        // Card 2: TOTAL EXPENSE
         JPanel cardExpense = createTopKpiCard(
                 "🔴 TOTAL EXPENSES (MONEY OUT)",
                 "₹ 0.00",
@@ -144,7 +163,6 @@ public class MainFrame extends JFrame implements ExpenseManager.DataChangeListen
         );
         lblTotalExpense = (JLabel) cardExpense.getClientProperty("valueLabel");
 
-        // Card 3: NET REMAINING BALANCE
         JPanel cardBalance = createTopKpiCard(
                 "🔵 NET REMAINING BALANCE",
                 "₹ 0.00",
@@ -159,7 +177,6 @@ public class MainFrame extends JFrame implements ExpenseManager.DataChangeListen
         kpiContainer.add(cardExpense);
         kpiContainer.add(cardBalance);
 
-        // Header + KPI Row combined
         JPanel northBlock = new JPanel();
         northBlock.setLayout(new BoxLayout(northBlock, BoxLayout.Y_AXIS));
         northBlock.setOpaque(false);
@@ -170,29 +187,26 @@ public class MainFrame extends JFrame implements ExpenseManager.DataChangeListen
 
         rootPanel.add(northBlock, BorderLayout.NORTH);
 
-        // --- 3. MAIN TABBED PANE (Simple, naive, standard tabs) ---
         tabbedPane = new JTabbedPane();
-        tabbedPane.setFont(new Font(ModernUIUtils.FONT_NAME, Font.BOLD, 13));
-        tabbedPane.setBackground(Color.WHITE);
+        ModernUIUtils.styleTabbedPane(tabbedPane);
 
         trackerPanel = new TrackerPanel(expenseManager);
         budgetPanel = new BudgetPanel(expenseManager, this);
         savingsGoalsPanel = new SavingsGoalsPanel(expenseManager, this);
         billSplitterPanel = new BillSplitterPanel(expenseManager, this);
 
-        tabbedPane.addTab("  💸  Expenses & Income Tracker  ", trackerPanel);
-        tabbedPane.addTab("  🎯  Monthly Budgets  ", budgetPanel);
-        tabbedPane.addTab("  🏆  Savings Goals  ", savingsGoalsPanel);
-        tabbedPane.addTab("  ⚡  Roommate Bill Splitter  ", billSplitterPanel);
+        tabbedPane.addTab("  💸  Tracker  ", trackerPanel);
+        tabbedPane.addTab("  🎯  Budgets  ", budgetPanel);
+        tabbedPane.addTab("  🏆  Goals  ", savingsGoalsPanel);
+        tabbedPane.addTab("  ⚡  Split Bills  ", billSplitterPanel);
 
         rootPanel.add(tabbedPane, BorderLayout.CENTER);
 
-        // --- 4. BOTTOM STATUS BAR ---
         JPanel statusBar = new JPanel(new BorderLayout());
-        statusBar.setBackground(Color.WHITE);
+        statusBar.setOpaque(false);
         statusBar.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(1, 0, 0, 0, ModernUIUtils.COLOR_BORDER),
-                new EmptyBorder(6, 16, 6, 16)));
+                new EmptyBorder(8, 16, 8, 16)));
 
         lblStatusLeft = new JLabel("Currency: Indian Rupee (₹) | Data Storage: data/*.csv (Auto-saved)");
         lblStatusLeft.setFont(ModernUIUtils.FONT_SMALL);

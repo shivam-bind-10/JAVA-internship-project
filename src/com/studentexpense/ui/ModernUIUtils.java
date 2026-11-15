@@ -31,8 +31,11 @@ public class ModernUIUtils {
     public static final Color COLOR_DANGER_HOVER = new Color(220, 38, 38);
     public static final Color COLOR_WARNING = new Color(245, 158, 11);     // #F59E0B Amber
     public static final Color COLOR_BG = new Color(248, 250, 252);         // Slate 50
+    public static final Color COLOR_BG_START = new Color(239, 246, 255);    // Blue-50
+    public static final Color COLOR_BG_END = new Color(248, 250, 252);      // Slate-50
     public static final Color COLOR_CARD_BG = Color.WHITE;
     public static final Color COLOR_BORDER = new Color(226, 232, 240);     // Slate 200
+    public static final Color COLOR_SURFACE = new Color(255, 255, 255, 220);
     public static final Color COLOR_TEXT_DARK = new Color(15, 23, 42);     // Slate 900
     public static final Color COLOR_TEXT_MUTED = new Color(100, 116, 139); // Slate 500
     public static final Color COLOR_ROW_ALT = new Color(248, 250, 252);
@@ -108,12 +111,27 @@ public class ModernUIUtils {
         return createCustomButton(text, new Color(241, 245, 249), new Color(226, 232, 240), COLOR_TEXT_DARK);
     }
 
+    public static JButton createPillButton(String text, Color bg, Color hoverBg, Color textCol) {
+        JButton btn = createCustomButton(text, bg, hoverBg, textCol);
+        btn.setBorder(new EmptyBorder(8, 14, 8, 14));
+        return btn;
+    }
+
     public static JButton createSuccessButton(String text) {
         return createCustomButton(text, COLOR_SUCCESS, COLOR_SUCCESS_HOVER, Color.WHITE);
     }
 
     public static JButton createDangerButton(String text) {
         return createCustomButton(text, COLOR_DANGER, COLOR_DANGER_HOVER, Color.WHITE);
+    }
+
+    public static void styleTabbedPane(JTabbedPane tabbedPane) {
+        tabbedPane.setOpaque(true);
+        tabbedPane.setBackground(COLOR_BG);
+        tabbedPane.setForeground(COLOR_TEXT_MUTED);
+        tabbedPane.setFont(new Font(FONT_NAME, Font.BOLD, 12));
+        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabbedPane.setBorder(BorderFactory.createEmptyBorder(8, 0, 0, 0));
     }
 
     /**
